@@ -25,5 +25,13 @@ public class Film {
     @Positive
     private final int moveTime;
 
+    private final LocalDate minDate = LocalDate.of(1895, 12, 28);
+
+    public void validate(Film film) {
+        if (film.getDateReliese().isBefore(minDate)) {
+            throw new ValidationException("Дата релиза должна быть < 28 декабря 1895 года!");
+        }
+    }
+
 }
 
