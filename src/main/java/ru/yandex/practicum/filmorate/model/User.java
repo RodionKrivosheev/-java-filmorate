@@ -26,7 +26,7 @@ public class User {
     @NonNull
     @Past
     @NotNull
-    private LocalDate birthdate;
+    private LocalDate birthday;
 
 
 }
