@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,12 +15,15 @@ import java.time.LocalDate;
 public class User {
     @NotNull
     private Integer id;
+    @NonNull
     @Email
+    @NotBlank
     private String email;
+    @NonNull
     @NotBlank
     private String login;
-    @NotBlank
     private String name;
+    @NonNull
     @Past
     @NotNull
     private LocalDate birthdate;

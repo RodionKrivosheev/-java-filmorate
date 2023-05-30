@@ -16,32 +16,47 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/film")
 public class FilmController {
+    private static final LocalDate MIN_DATE = LocalDate.of(1895, 12, 28);
+    private int id = 1;
     private final Map<Integer, Film> films = new HashMap<>();
+
+    private int generateId() {
+        return id++;
+    }
+
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody Film film) {
-        film.validate(film);
-        log.info("add film complete");
-        if (film.getId() != null) {
-            films.put(film.getId(), film);
-        } else {
-            throw new ValidationException("Id не существует");
-        }
+        validate(film);
+        log.info("add film");
+        film.setId(generateId());
+        films.put(film.getId(), film);
         return film;
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
-        film.validate(film);
-        log.info("update fill complete");
+        validate(film);
+        if (!films.containsKey(film.getId())) {
+            throw new ValidationException("Фильм не найден.");
+        }
+        log.info("update film");
         films.put(film.getId(), film);
         return film;
     }
 
     @GetMapping
     public List<Film> getAllFilms() {
-        log.info("get all films complete");
+        log.info("get all films");
         return new ArrayList<>(films.values());
     }
 
+    private void validate(Film film) {
+        if (film.getDateReliese().isBefore(MIN_DATE)) {
+            throw new ValidationException("Дата релиза должна быть не раньше 28 декабря 1895 года!");
+        }
+        if (film.getDescription() != null && film.getDescription().length() > 200) {
+            throw new ValidationException("Максимальная длина описания — 200 символов.");
+        }
+    }
 }
