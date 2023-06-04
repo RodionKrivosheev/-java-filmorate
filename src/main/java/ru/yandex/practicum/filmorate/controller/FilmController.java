@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-@RequestMapping("/film")
+@RequestMapping("/films")
 public class FilmController {
     private static final LocalDate MIN_DATE = LocalDate.of(1895, 12, 28);
     private int id = 1;
