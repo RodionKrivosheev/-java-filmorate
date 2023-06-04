@@ -11,10 +11,9 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class User {
     @NotNull
-    private Integer id;
+    private int id;
     @NonNull
     @Email
     @NotBlank
@@ -22,9 +21,11 @@ public class User {
     @NonNull
     @NotBlank
     private String login;
+
     private String name;
     @NonNull
     @Past
     @NotNull
     private LocalDate birthday;
 }
+

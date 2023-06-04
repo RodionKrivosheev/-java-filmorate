@@ -50,15 +50,12 @@ public class UserController {
         return new ArrayList<>(users.values());
     }
 
-    public static void validateUser(User user) {
+    public void validateUser(User user) {
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
         }
         if ((user.getName() == null) || user.getName().isBlank()) {
             user.setName(user.getLogin());
-        }
-        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем.");
         }
     }
 }
