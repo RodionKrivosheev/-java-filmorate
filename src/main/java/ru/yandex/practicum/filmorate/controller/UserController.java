@@ -35,7 +35,7 @@ public class UserController {
         log.info("update user");
         validateUser(user);
         if (!users.containsKey(user.getId())) {
-            throw new ValidationException("Пользователь не найден.");
+            throw new ValidException("Пользователь не найден.");
         }
         users.put(user.getId(), user);
         log.info("Данные пользователя с ID " + user.getId() + " обновлены.");
@@ -52,16 +52,16 @@ public class UserController {
 
     public static void validateUser(User user) {
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @.");
+            throw new ValidException("Электронная почта не может быть пустой и должна содержать символ @.");
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
+            throw new ValidException("Логин не может быть пустым и содержать пробелы.");
         }
         if ((user.getName() == null) || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем.");
+            throw new ValidException("Дата рождения не может быть в будущем.");
         }
     }
 }

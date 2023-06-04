@@ -38,7 +38,7 @@ public class FilmController {
     public Film updateFilm(@Valid @RequestBody Film film) {
         validate(film);
         if (!films.containsKey(film.getId())) {
-            throw new ValidationException("Фильм не найден.");
+            throw new ValidException("Фильм не найден.");
         }
         log.info("update film");
         films.put(film.getId(), film);
@@ -53,10 +53,10 @@ public class FilmController {
 
     private void validate(Film film) {
         if (film.getDateReliese().isBefore(MIN_DATE)) {
-            throw new ValidationException("Дата релиза должна быть не раньше 28 декабря 1895 года!");
+            throw new ValidException("Дата релиза должна быть не раньше 28 декабря 1895 года!");
         }
         if (film.getDescription() != null && film.getDescription().length() > 200) {
-            throw new ValidationException("Максимальная длина описания — 200 символов.");
+            throw new ValidException("Максимальная длина описания — 200 символов.");
         }
     }
 }
