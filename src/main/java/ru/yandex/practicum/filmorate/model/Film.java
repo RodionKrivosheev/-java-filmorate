@@ -13,18 +13,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Film {
     @NotNull
-    private Integer id;
+    private int id;
     @NotBlank
-    private final String name;
+    private String name;
     @NotBlank
     private String description;
     @NotNull
-    private final LocalDate dateReliese;
+    private LocalDate dateReliese;
     @NotNull
     @Positive
-    private final int moveTime;
-
-
+    private int moveTime;
 }
 
 
