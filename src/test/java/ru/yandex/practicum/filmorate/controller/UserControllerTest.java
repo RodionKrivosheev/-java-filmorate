@@ -19,9 +19,9 @@ class UserControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        user = new User(0,"email1@gmail.com", "Login1", "ddd", LocalDate.of(1994, 11, 02));
+        user = new User("email1@gmail.com", "Login1", LocalDate.of(1994, 11, 02));
         user.setName("Name1");
-        user1 = new User(1,"email2@gmail.com","Login2", "ddd", LocalDate.of(1994, 11, 02));
+        user1 = new User("email2@gmail.com","Login2", LocalDate.of(1994, 11, 02));
         user.setName("Name2");
         userController.getAllUsers().clear();
     }
@@ -37,7 +37,7 @@ class UserControllerTest {
     public void updateUser() {
         userController.addUser(user);
         userController.addUser(user1);
-        user1 = new User(1,"email2@gmail.com","Login2", "ddd", LocalDate.of(1992, 11, 02));
+        user1 = new User("email2@gmail.com","Login2", LocalDate.of(1992, 11, 02));
         user1.setId(2);
         userController.updateUser(user1);
         assertEquals(userController.getAllUsers().get(1), user1);
