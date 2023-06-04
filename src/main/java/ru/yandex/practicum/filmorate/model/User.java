@@ -10,6 +10,7 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
 public class User {
     @NotNull
     private Integer id;
