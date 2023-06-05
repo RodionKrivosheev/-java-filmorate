@@ -17,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private static final LocalDate MIN_DATE = LocalDate.of(1895, 12, 28);
-    private int id = 0;
+    private int id = 1;
     private final Map<Integer, Film> films = new HashMap<>();
 
     private int generateId() {
@@ -36,11 +36,11 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
+        log.info("update film");
         validate(film);
         if (!films.containsKey(film.getId())) {
             throw new ValidationException("Фильм не найден.");
         }
-        log.info("update film");
         films.put(film.getId(), film);
         return film;
     }

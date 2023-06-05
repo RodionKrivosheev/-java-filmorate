@@ -10,17 +10,19 @@ import java.time.LocalDate;
 
 @Data
 public class Film {
+    @NotNull
     private int id;
     @NotNull
-    private final String name;
+    @NotBlank
+    private String name;
     @NotNull
     @NotBlank
-    private final String description;
+    private String description;
     @NotNull
-    private final LocalDate dateReliese;
+    private LocalDate dateReliese;
     @NotNull
     @Positive
-    private final int moveTime;
+    private int moveTime;
 }
 
 
