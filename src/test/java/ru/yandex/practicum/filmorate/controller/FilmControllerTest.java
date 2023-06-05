@@ -17,12 +17,12 @@ class FilmControllerTest {
     @Autowired
     private FilmController filmController;
     private Film film;
-    private Film film2;
+    private Film film1;
 
     @BeforeEach
     public void beforeEach() {
-        film = new Film("Film1", "Description1", LocalDate.of(1994, 11, 02), 190);
-        film2 = new Film("Film2", "Description2", LocalDate.of(2010, 9, 03), 190);
+        film = new Film(1, "Film1", "Description1", LocalDate.of(1994, 11, 02), 190);
+        film1 = new Film(2, "Film2", "Description2", LocalDate.of(2015, 3, 20), 150);
 
     }
 
@@ -36,9 +36,9 @@ class FilmControllerTest {
     @Test
     public void updateFilm() {
         filmController.addFilm(film);
-        filmController.addFilm(film2);
-        film2 = new Film("Film3", "Description3", LocalDate.of(1555, 7, 15), 190);
-        ValidationException e = assertThrows(ValidationException.class, () -> filmController.updateFilm(film2));
+        filmController.addFilm(film1);
+        film1 = new Film(2, "Film3", "Description3", LocalDate.of(1555, 7, 15), 190);
+        ValidationException e = assertThrows(ValidationException.class, () -> filmController.updateFilm(film1));
         assertEquals(e.getMessage(), "Дата релиза должна быть не раньше 28 декабря 1895 года!");
     }
 
