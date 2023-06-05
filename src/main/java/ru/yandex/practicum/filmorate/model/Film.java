@@ -8,18 +8,17 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class Film {
     private int id;
     @NotBlank
-    private String name;
+    private final String name;
     @NotBlank
-    private String description;
+    private final String description;
     @NotNull
-    private LocalDate dateReliese;
+    private final LocalDate dateReliese;
     @NotNull
     @Positive
-    private int moveTime;
+    private final int moveTime;
 }
 
 
