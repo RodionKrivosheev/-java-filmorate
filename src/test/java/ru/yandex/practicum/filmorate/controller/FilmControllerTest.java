@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.controller;
+package ru.yandex.practicum.filmorate.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class FilmControllerTest {
     @BeforeEach
     public void beforeEach() {
         film = new Film(1, "Film1", "Description1", LocalDate.of(1994, 11, 02), 190);
-        film1 = new Film(2, "Film2", "Description2", LocalDate.of(2015, 3, 20), 150);
+        film1 = new Film(2, "Film2", "Description2", LocalDate.of(2010, 9, 03), 190);
 
     }
 
