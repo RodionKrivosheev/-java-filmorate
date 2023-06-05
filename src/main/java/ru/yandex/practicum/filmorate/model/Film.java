@@ -13,15 +13,15 @@ public class Film {
     @NotNull
     private int id;
     @NotNull
-    private String name;
+    private final String name;
     @NotNull
     @NotBlank
-    private String description;
+    private final String description;
     @NotNull
-    private LocalDate dateReliese;
+    private final LocalDate dateReliese;
     @NotNull
     @Positive
-    private int moveTime;
+    private final int moveTime;
 }
 
 
