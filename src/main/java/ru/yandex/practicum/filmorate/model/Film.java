@@ -10,13 +10,12 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class Film {
-    @NotNull
     private int id;
+    @NotNull
     @NotBlank
     private String name;
-    @NotBlank
+    @NotNull
     private String description;
     @NotNull
     private LocalDate dateReliese;
