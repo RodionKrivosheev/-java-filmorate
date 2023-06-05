@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 public class Film {
-    @NotNull
+    @Id
     private int id;
     @NotNull
     private final String name;
