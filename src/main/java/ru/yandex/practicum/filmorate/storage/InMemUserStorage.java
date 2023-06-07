@@ -1,17 +1,19 @@
-package ru.yandex.practicum.filmorate.controller;
+package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.util.*;
 
-@RestController
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+@Component
 @Slf4j
-@RequestMapping("/users")
-public class UserController {
+public class InMemUserStorage implements UserStorage {
     private HashMap<Integer, User> users = new HashMap<>();
     private int id = 1;
 
@@ -19,8 +21,8 @@ public class UserController {
         return id++;
     }
 
-    @PostMapping
-    public User addUser(@Valid @RequestBody User user) {
+    @Override
+    public User addUser(User user) {
         log.info("add user");
         validateUser(user);
         user.setId(generateId());
@@ -29,12 +31,12 @@ public class UserController {
         return user;
     }
 
-    @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
+    @Override
+    public User updateUser(User user) {
         log.info("update user");
         validateUser(user);
         if (!users.containsKey(user.getId())) {
-            throw new ValidationException("Пользователь не найден.");
+            throw new NotFoundException("Пользователь не найден.");
         }
         users.put(user.getId(), user);
         log.info("Данные пользователя с ID " + user.getId() + " обновлены.");
@@ -43,10 +45,19 @@ public class UserController {
 
     }
 
-    @GetMapping
+    @Override
     public List<User> getAllUsers() {
         log.info("get all users");
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public User getUserById(int userId) {
+        if (users.containsKey(userId)) {
+            return users.get(userId);
+        } else {
+            throw new NotFoundException("Пользователь не найден!");
+        }
     }
 
     public void validateUser(User user) {
