@@ -67,18 +67,4 @@ public class UserService {
         return mutualFriends;
     }
 
-    public void validateUser(User user) {
-        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
-        }
-        if ((user.getName() == null) || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-    }
-
-    public void isExist(User user) {
-        if (!inMemUserStorage.getUsers().containsKey(user.getId())) {
-            throw new NotFoundException("Пользователь не найден.");
-        }
-    }
 }
