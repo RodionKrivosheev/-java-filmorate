@@ -75,6 +75,7 @@ public class UserService {
             user.setName(user.getLogin());
         }
     }
+
     public void isExist(User user) {
         if (!inMemUserStorage.getUsers().containsKey(user.getId())) {
             throw new NotFoundException("Пользователь не найден.");
