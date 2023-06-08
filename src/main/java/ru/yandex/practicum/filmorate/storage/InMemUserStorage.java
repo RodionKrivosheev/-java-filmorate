@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
-import javax.validation.ValidationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,12 @@ import java.util.List;
 @Slf4j
 public class InMemUserStorage implements UserStorage {
     private HashMap<Integer, User> users = new HashMap<>();
+
+    public HashMap<Integer, User> getUsers() {
+        return users;
+    }
+
+    UserService userService;
     private int id = 1;
 
     private int generateId() {
@@ -23,23 +29,21 @@ public class InMemUserStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
-        log.info("add user");
-        validateUser(user);
+        log.debug("add user");
+        userService.validateUser(user);
         user.setId(generateId());
         users.put(user.getId(), user);
-        log.info("Пользователь сохранен.");
+        log.debug("Пользователь сохранен.");
         return user;
     }
 
     @Override
     public User updateUser(User user) {
-        log.info("update user");
-        validateUser(user);
-        if (!users.containsKey(user.getId())) {
-            throw new NotFoundException("Пользователь не найден.");
-        }
+        log.debug("update user");
+        userService.validateUser(user);
+        userService.isExist(user);
         users.put(user.getId(), user);
-        log.info("Данные пользователя с ID " + user.getId() + " обновлены.");
+        log.debug("Данные пользователя с ID " + user.getId() + " обновлены.");
         return user;
 
 
@@ -47,7 +51,7 @@ public class InMemUserStorage implements UserStorage {
 
     @Override
     public List<User> getAllUsers() {
-        log.info("get all users");
+        log.debug("get all users");
         return new ArrayList<>(users.values());
     }
 
@@ -60,12 +64,4 @@ public class InMemUserStorage implements UserStorage {
         }
     }
 
-    public void validateUser(User user) {
-        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
-        }
-        if ((user.getName() == null) || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-    }
 }

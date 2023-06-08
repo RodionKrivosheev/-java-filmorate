@@ -38,26 +38,31 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable int userId) {
+        log.info("getUserById");
         return userService.getUserById(userId);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
     public User addFriend(@PathVariable("userId") int userId, @PathVariable("friendId") int friendId) {
+        log.info("User " + userId + " add Friend: " + friendId);
         return userService.addFriend(userId, friendId);
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
     public User deleteFriend(@PathVariable("userId") int userId, @PathVariable("friendId") int friendId) {
+        log.info("User " + userId + " delete Friend: " + friendId);
         return userService.deleteFriend(userId, friendId);
     }
 
     @GetMapping("/{userId}/friends")
     public List<User> getFriends(@PathVariable int userId) {
+        log.info("User " + userId + " get Friends");
         return userService.getFriends(userId);
     }
 
     @GetMapping("/{userId}/friends/common/{otherId}")
     public List<User> getCorporateFriends(@PathVariable int userId, @PathVariable int otherId) {
+        log.info("User " + userId + " get Corporate Friends with User " + otherId);
         return userService.corporateFriends(userId, otherId);
     }
 }

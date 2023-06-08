@@ -2,15 +2,19 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.InMemUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
 public class UserService {
+    InMemUserStorage inMemUserStorage;
     private final UserStorage userStorage;
 
     public UserService(UserStorage userStorage) {
@@ -61,5 +65,19 @@ public class UserService {
         }
         log.info("Список общих друзей пользователей");
         return mutualFriends;
+    }
+
+    public void validateUser(User user) {
+        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
+            throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
+        }
+        if ((user.getName() == null) || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+    }
+    public void isExist(User user) {
+        if (!inMemUserStorage.getUsers().containsKey(user.getId())) {
+            throw new NotFoundException("Пользователь не найден.");
+        }
     }
 }
