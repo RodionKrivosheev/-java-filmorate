@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Data
 public class Film {
+    @NonNull
     private int id;
     @NonNull
     @NotBlank
