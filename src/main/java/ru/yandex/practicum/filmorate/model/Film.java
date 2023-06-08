@@ -5,6 +5,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Film {
     private String name;
     @NonNull
     @NotBlank
+    @Size(max = 200, message = "Максимальная длина описания — 200 символов.")
     private String description;
     @NonNull
     @NotNull
