@@ -59,7 +59,7 @@ public class InMemFilmStorage implements FilmStorage {
     }
 
     private void validate(Film film) {
-        if (film.getReleaseDate().isBefore(constants.minDate)) {
+        if (film.getReleaseDate().isBefore(constants.MIN_DATE)) {
             throw new ValidationException("Дата релиза должна быть не раньше 28 декабря 1895 года!");
         }
         if (film.getDescription() != null && film.getDescription().length() > 200) {
