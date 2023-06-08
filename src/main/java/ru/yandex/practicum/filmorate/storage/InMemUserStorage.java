@@ -74,6 +74,7 @@ public class InMemUserStorage implements UserStorage {
             user.setName(user.getLogin());
         }
     }
+
     public void isExist(User user) {
         if (!users.containsKey(user.getId())) {
             throw new NotFoundException("Пользователь не найден.");
