@@ -25,6 +25,7 @@ public class InMemUserStorage implements UserStorage {
     @Override
     public User addUser(User user) {
         log.debug("add user");
+        Validator.validateUser(user);
         user.setId(generateId());
         users.put(user.getId(), user);
         log.debug("Пользователь сохранен.");
