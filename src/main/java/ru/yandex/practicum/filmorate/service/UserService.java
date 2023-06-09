@@ -23,6 +23,7 @@ public class UserService {
 
     public User addFriend(int userId, int friendId) {
         User user = userStorage.getUserById(userId);
+        Validator.validateUser(user);
         User friend = userStorage.getUserById(friendId);
         user.addFriend(friendId);
         friend.addFriend(userId);
@@ -32,6 +33,7 @@ public class UserService {
 
     public User deleteFriend(int userId, int friendId) {
         User user = userStorage.getUserById(userId);
+        Validator.validateUser(user);
         User friend = userStorage.getUserById(friendId);
         user.deleteFriend(friendId);
         friend.deleteFriend(userId);
@@ -41,6 +43,7 @@ public class UserService {
 
     public List<User> getFriends(int userId) {
         User user = userStorage.getUserById(userId);
+        Validator.validateUser(user);
         List<User> friendsList = new ArrayList<>();
         for (Integer id : user.getFriends()) {
             friendsList.add(userStorage.getUserById(id));
@@ -51,6 +54,7 @@ public class UserService {
 
     public List<User> corporateFriends(int userId, int friendId) {
         User user = userStorage.getUserById(userId);
+        Validator.validateUser(user);
         User friend = userStorage.getUserById(friendId);
         List<User> mutualFriends = new ArrayList<>();
         for (Integer id : user.getFriends()) {
