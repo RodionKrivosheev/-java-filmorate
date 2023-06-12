@@ -8,11 +8,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
-public class User {
+public class User extends AbstractEntity {
     @NotNull
     private int id;
     @NonNull
@@ -37,6 +39,13 @@ public class User {
         friends.remove(id);
     }
 
+    public List<Integer> getFiends() {
+        return new ArrayList<>(friends);
+    }
+
+    public boolean containsFriend(int id){
+        return friends.contains(id);
+    }
 }
 
 

@@ -1,14 +1,16 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import ru.yandex.practicum.filmorate.model.Film;
-import java.util.List;
 
-public interface FilmStorage {
-    List<Film> getAllFilms();
+//ТЗ требует этот интерфейс
 
-    Film addFilm(Film film);
+public interface FilmStorage extends CommonStorage<Film> {
 
-    Film updateFilm(Film film);
+    void createGenresByFilm(Film film);
 
-    Film getFilmById(int id);
+    void updateGenresByFilm(Film film);
+
+    void loadLikes(Film film);
+
+    void saveLikes(Film film);
 }

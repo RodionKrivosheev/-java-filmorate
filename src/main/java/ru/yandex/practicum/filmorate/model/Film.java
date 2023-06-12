@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 @Data
-public class Film {
+public class Film extends AbstractEntity {
     @NonNull
     private int id;
     @NonNull
@@ -29,9 +29,13 @@ public class Film {
     @NotNull
     @Positive
     private int duration;
+    private Rating mpa;
+    private Set<Genre> genres;
 
     private Set<Integer> likes = new HashSet<>();
-
+    public Set<Integer> getLikes() {
+        return new HashSet<>(likes);
+    }
     private int likesCounter;
 
     public void addLike(Integer id) {
@@ -42,6 +46,10 @@ public class Film {
     public void deleteLike(Integer id) {
         likes.remove(id);
         likesCounter--;
+    }
+
+    public int getLikesCount() {
+        return likes.size();
     }
 }
 
