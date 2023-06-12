@@ -10,7 +10,7 @@ import java.util.*;
 @RestController
 @Slf4j
 @RequestMapping("/users")
-public class UserController extends AbstractController<User, UserService>{
+public class UserController extends AbstractController<User, UserService> {
     @Autowired
     public UserController(UserService service) {
         super(service);
