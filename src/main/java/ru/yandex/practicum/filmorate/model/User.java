@@ -44,9 +44,10 @@ public class User extends AbstractEntity {
         return new ArrayList<>(friends);
     }
 
-    public boolean containsFriend(int id){
+    public boolean containsFriend(int id) {
         return friends.contains(id);
     }
+
 }
 
 
