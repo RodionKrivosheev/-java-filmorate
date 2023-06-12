@@ -3,58 +3,66 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.*;
 
 @RestController
 @Slf4j
 @RequestMapping("/users")
 public class UserController {
-    private HashMap<Integer, User> users = new HashMap<>();
-    private int id = 1;
+    private final UserStorage userStorage;
+    private final UserService userService;
 
-    private int generateId() {
-        return id++;
+    public UserController(UserStorage userStorage, UserService userService) {
+        this.userStorage = userStorage;
+        this.userService = userService;
     }
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {
-        log.info("add user");
-        validateUser(user);
-        user.setId(generateId());
-        users.put(user.getId(), user);
-        log.info("Пользователь сохранен.");
-        return user;
+        return userStorage.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        log.info("update user");
-        validateUser(user);
-        if (!users.containsKey(user.getId())) {
-            throw new ValidationException("Пользователь не найден.");
-        }
-        users.put(user.getId(), user);
-        log.info("Данные пользователя с ID " + user.getId() + " обновлены.");
-        return user;
-
-
+        return userStorage.updateUser(user);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        log.info("get all users");
-        return new ArrayList<>(users.values());
+        return userStorage.getAllUsers();
     }
 
-    public void validateUser(User user) {
-        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
-        }
-        if ((user.getName() == null) || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable int userId) {
+        log.info("getUserById");
+        return userService.getUserById(userId);
+    }
+
+    @PutMapping("/{userId}/friends/{friendId}")
+    public User addFriend(@PathVariable("userId") int userId, @PathVariable("friendId") int friendId) {
+        log.info("User " + userId + " add Friend: " + friendId);
+        return userService.addFriend(userId, friendId);
+    }
+
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public User deleteFriend(@PathVariable("userId") int userId, @PathVariable("friendId") int friendId) {
+        log.info("User " + userId + " delete Friend: " + friendId);
+        return userService.deleteFriend(userId, friendId);
+    }
+
+    @GetMapping("/{userId}/friends")
+    public List<User> getFriends(@PathVariable int userId) {
+        log.info("User " + userId + " get Friends");
+        return userService.getFriends(userId);
+    }
+
+    @GetMapping("/{userId}/friends/common/{otherId}")
+    public List<User> getCorporateFriends(@PathVariable int userId, @PathVariable int otherId) {
+        log.info("User " + userId + " get Corporate Friends with User " + otherId);
+        return userService.corporateFriends(userId, otherId);
     }
 }
