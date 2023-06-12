@@ -69,7 +69,7 @@ class ValidateRequestBodyControllerTest {
                 Arguments.of("/films",  "{ \"name\": \"no film\",  \"description\": \"no film test\"," +
                         "\"releaseDate\": \"1895-12-27\",  \"duration\": 100}"),
                 //длинное описание
-                Arguments.of("/films",  "{"+ longFilm() + "}")
+                Arguments.of("/films",  "{" + longFilm() + "}")
         );
     }
 
