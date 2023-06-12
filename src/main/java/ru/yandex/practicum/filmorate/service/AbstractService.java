@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.storage.Constants;
 import java.util.List;
 
 @Slf4j
-public abstract class AbstractService <E extends AbstractEntity, T extends CommonStorage<E>>
+public abstract class AbstractService<E extends AbstractEntity, T extends CommonStorage<E>>
         implements CommonService<E> {
 
     protected final T storage;

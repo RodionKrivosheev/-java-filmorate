@@ -29,6 +29,7 @@ public class User extends AbstractEntity {
     @Past
     @NotNull
     private LocalDate birthday;
+
     private Set<Integer> friends = new HashSet<>();
 
     public void addFriend(Integer id) {

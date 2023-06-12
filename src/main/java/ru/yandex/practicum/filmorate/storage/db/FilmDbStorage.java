@@ -77,8 +77,6 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
-
-
     @Override
     public Film update(Film film) {
         String sql =

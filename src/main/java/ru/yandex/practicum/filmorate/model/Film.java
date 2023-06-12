@@ -33,9 +33,11 @@ public class Film extends AbstractEntity {
     private Set<Genre> genres;
 
     private Set<Integer> likes = new HashSet<>();
+
     public Set<Integer> getLikes() {
         return new HashSet<>(likes);
     }
+
     private int likesCounter;
 
     public void addLike(Integer id) {
