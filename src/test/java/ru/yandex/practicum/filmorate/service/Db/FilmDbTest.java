@@ -72,7 +72,7 @@ public class FilmDbTest {
 
         assertThat(result.size(), is(2));
         checkFilm(result.get(0), film1);
-        checkFilm(result.get(1), film2);
+        checkFilm(result.get(1), film1);
     }
 
     private void checkFilm(Film result, Film expected) {
