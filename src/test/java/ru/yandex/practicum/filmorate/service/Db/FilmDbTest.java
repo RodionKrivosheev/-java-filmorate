@@ -70,7 +70,7 @@ public class FilmDbTest {
     public void testGetFilmsListWithLimit() {
         List<Film> result = filmService.getFilmsList(2);
 
-        assertThat(result.size(), 2);
+        assertThat(result.size(), is(2));
         checkFilm(result.get(0), film1);
         checkFilm(result.get(1), film2);
     }
