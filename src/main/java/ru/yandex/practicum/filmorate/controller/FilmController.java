@@ -1,36 +1,43 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.*;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmDbService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/films")
-public class FilmController extends AbstractController<Film, FilmService> {
+@Component
+@RequiredArgsConstructor
+public class FilmController {
+    private final FilmDbService filmService;
 
-    @Autowired
-    public FilmController(FilmService service) {
-        super(service);
+    @PostMapping("/films")
+    public Film addFilm(@Valid @RequestBody Film film) {
+        return filmService.addFilm(film);
     }
 
-    @PutMapping("/{id}/like/{userId}")
-    public void addLike(@PathVariable int filmId, @PathVariable int userId) {
-        service.addLike(filmId, userId);
+    @PutMapping("/films")
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        return filmService.updateFilm(film);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
-    public void deleteLike(@PathVariable int filmId, @PathVariable int userId) {
-        service.deleteLike(filmId, userId);
+    @GetMapping("/films/{id}")
+    public Film getFilmById(@PathVariable int id) {
+        log.info("Get film by id controller");
+
+        return filmService.getFilmById(id);
     }
 
-    @GetMapping("/popular")
-    public List<Film> findPopularFilms(@RequestParam(defaultValue = "10") int count) {
-        return service.getPopularFilms(count);
-    }
+    @GetMapping("/films")
+    public List<Film> getAllFilms() {
+        log.info("get all films controller");
 
+        return filmService.getFilmsList(10);
+    }
 }

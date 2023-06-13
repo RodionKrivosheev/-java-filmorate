@@ -1,61 +1,38 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import ru.yandex.practicum.filmorate.auxilary.IsAfter;
 
-import lombok.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+
+import javax.validation.constraints.*;
 
 @Data
-public class Film extends AbstractEntity {
-    @NonNull
-    private int id;
-    @NonNull
+@AllArgsConstructor
+@Builder
+public class Film {
+    @Builder.Default
+    private int id = 1;
     @NotBlank
     private String name;
-    @NonNull
+    private List<FilmGenre> genres;
     @NotBlank
-    @Size(max = 200, message = "Максимальная длина описания — 200 символов.")
+    @Size(max = 200)
     private String description;
-    @NonNull
     @NotNull
+    @IsAfter(current = "1895-12-28")
     private LocalDate releaseDate;
-    @NonNull
     @NotNull
-    @Positive
+    @Min(value = 0)
     private int duration;
-    private Rating mpa;
-    private Set<Genre> genres;
+    @NotNull
+    private FilmRating mpa;
 
-    private Set<Integer> likes = new HashSet<>();
-
-    public Set<Integer> getLikes() {
-        return new HashSet<>(likes);
-    }
-
-    private int likesCounter;
-
-    public void addLike(Integer id) {
-        likes.add(id);
-        likesCounter++;
-    }
-
-    public void deleteLike(Integer id) {
-        likes.remove(id);
-        likesCounter--;
-    }
-
-    public int getLikesCount() {
-        return likes.size();
+    public void setMpa(FilmRating mpa) {
+        this.mpa = mpa;
     }
 }
-
-
-
-
-

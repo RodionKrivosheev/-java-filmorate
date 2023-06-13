@@ -1,20 +1,22 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.model.Rating;
-import ru.yandex.practicum.filmorate.storage.RatingStorage;
+import ru.yandex.practicum.filmorate.dao.RatingDao;
+import ru.yandex.practicum.filmorate.model.FilmRating;
+
+import java.util.List;
 
 @Service
-public class RatingService  extends AbstractService<Rating, RatingStorage> {
+@RequiredArgsConstructor
+public class RatingService {
+    private final RatingDao ratingDao;
 
-    @Autowired
-    public RatingService(RatingStorage storage) {
-        super(storage);
+    public List<FilmRating> getRatingList() {
+        return ratingDao.getRatingList();
     }
 
-    @Override
-    public void validationBeforeCreate(Rating data) {
-
+    public FilmRating getRatingById(int ratingId) {
+        return ratingDao.getRatingById(ratingId);
     }
 }

@@ -1,17 +1,27 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.model.Rating;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.service.RatingService;
 
-@RestController
-@RequestMapping("/mpa")
-public class RatingController extends AbstractController<Rating, RatingService> {
+import java.util.List;
 
-    @Autowired
-    public RatingController(RatingService service) {
-        super(service);
+@RestController
+@RequiredArgsConstructor
+@Component
+@RequestMapping("/mpa")
+public class RatingController {
+    private final RatingService ratingService;
+
+    @GetMapping
+    public List<FilmRating> getRatingList() {
+        return ratingService.getRatingList();
+    }
+
+    @GetMapping("/{id}")
+    public FilmRating getRatingById(@PathVariable int id) {
+        return ratingService.getRatingById(id);
     }
 }

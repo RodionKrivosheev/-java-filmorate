@@ -1,20 +1,22 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.storage.GenreStorage;
+import ru.yandex.practicum.filmorate.dao.GenreDao;
+import ru.yandex.practicum.filmorate.model.FilmGenre;
+
+import java.util.List;
 
 @Service
-public class GenreService extends AbstractService<Genre, GenreStorage> {
+@RequiredArgsConstructor
+public class GenreService {
+    private final GenreDao genreDao;
 
-    @Autowired
-    public GenreService(GenreStorage storage) {
-        super(storage);
+    public List<FilmGenre> getGenresList() {
+        return genreDao.getGenresList();
     }
 
-    @Override
-    public void validationBeforeCreate(Genre data) {
-
+    public FilmGenre getGenreById(int genreId) {
+        return genreDao.getGenreById(genreId);
     }
 }
