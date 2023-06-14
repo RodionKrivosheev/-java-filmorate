@@ -36,15 +36,10 @@ public class FilmController {
         return filmService.getFilmById(id);
     }
 
-    @GetMapping("/films/{count}")
-    public List<Film> getAllFilms(@PathVariable int count) {
+    @GetMapping("/films/")
+    public List<Film> getAllFilms() {
         log.info("get all films controller");
-        Long c = null;
-        if (count == c) {
-            return filmService.getFilmsList(10);
-        } else {
-            return filmService.getFilmsList(count);
-        }
+        return filmService.getFilmsList(10);
 
     }
 
