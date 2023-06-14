@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.FilmStorage;
 import ru.yandex.practicum.filmorate.dao.GenreStorage;
 import ru.yandex.practicum.filmorate.dao.RatingStorage;
-import ru.yandex.practicum.filmorate.dao.impl.GenreDbStorage;
-import ru.yandex.practicum.filmorate.dao.impl.RatingDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
