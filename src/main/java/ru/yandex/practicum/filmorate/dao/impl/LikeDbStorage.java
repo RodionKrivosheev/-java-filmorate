@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.GenreStorage;
 import ru.yandex.practicum.filmorate.dao.RatingStorage;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmRating;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,14 +55,16 @@ public class LikeDbStorage implements ru.yandex.practicum.filmorate.dao.LikeStor
     }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
+        List<Genre> genreList = genreStorage.getGenresListForFilm(rs.getInt("film_id"));
+        FilmRating rating = ratingStorage.getRatingById(rs.getInt("film_rating_id"));
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("film_title"))
-                .genres(genreStorage.getGenresListForFilm(rs.getInt("film_id")))
+                .genres(genreList)
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
-                .mpa(ratingStorage.getRatingById(rs.getInt("film_rating_id")))
+                .mpa(rating)
                 .build();
     }
 }

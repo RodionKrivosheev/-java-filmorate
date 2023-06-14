@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
-import ru.yandex.practicum.filmorate.service.LikeService;
+import ru.yandex.practicum.filmorate.service.LikeDbService;
 import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import java.time.LocalDate;
@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class LikeDbTest {
     private final FilmDbService filmService;
     private final UserDbService userService;
-    private final LikeService likeService;
+    private final LikeDbService likeDbService;
     private final Genre genre = new Genre(1);
     private final FilmRating mpa = new FilmRating(1);
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
@@ -47,10 +47,10 @@ public class LikeDbTest {
         userService.addUser(user1);
         userService.addUser(user2);
 
-        likeService.like(film1.getId(), user1.getId());
+        likeDbService.like(film1.getId(), user1.getId());
 
-        likeService.like(film3.getId(), user2.getId());
-        likeService.like(film3.getId(), user1.getId());
+        likeDbService.like(film3.getId(), user2.getId());
+        likeDbService.like(film3.getId(), user1.getId());
 
     }
 
@@ -58,10 +58,10 @@ public class LikeDbTest {
     public void testUnlikeFilm() {
         testLikeFilm();
 
-        likeService.unlike(film3.getId(), user2.getId());
-        likeService.unlike(film3.getId(), user1.getId());
+        likeDbService.unlike(film3.getId(), user2.getId());
+        likeDbService.unlike(film3.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(2);
+        List<Film> result = likeDbService.getMostPopularFilms(2);
 
         assertThat(result.get(0), is(film1));
         assertThat(result.get(1), is(film3));
@@ -71,7 +71,7 @@ public class LikeDbTest {
     public void testGetMostLikedFilmsWithLimit() {
         testLikeFilm();
 
-        List<Film> result = likeService.getMostPopularFilms(2);
+        List<Film> result = likeDbService.getMostPopularFilms(2);
 
         assertThat(result.get(0), is(film3));
         assertThat(result.get(1), is(film1));

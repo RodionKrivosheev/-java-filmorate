@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.GenreStorage;
 import ru.yandex.practicum.filmorate.dao.RatingStorage;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.service.FilmDbService;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -20,8 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStorage {
     final JdbcTemplate jdbcTemplate;
-    private final RatingStorage ratingStorage;
-    private final GenreStorage genreStorage;
 
     @Override
     public Film addFilm(Film film) {
@@ -46,7 +46,7 @@ public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStor
 
         int id = (int) keyHolder.getKey().longValue();
 
-        List<Genre> genres = genreStorage.addGenresToFilm(id, film.getGenres());
+        List<Genre> genres = FilmDbService.genreStorage.addGenresToFilm(id, film.getGenres());
         film.setGenres(genres);
 
         return getFilmById(id);
@@ -76,8 +76,8 @@ public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStor
                 film.getMpa().getId(),
                 film.getId());
 
-        genreStorage.deleteGenresForFilm(film.getId());
-        List<Genre> genres = genreStorage.addGenresToFilm(film.getId(), film.getGenres());
+        FilmDbService.genreStorage.deleteGenresForFilm(film.getId());
+        List<Genre> genres = FilmDbService.genreStorage.addGenresToFilm(film.getId(), film.getGenres());
         film.setGenres(genres);
 
         return getFilmById(film.getId());
@@ -92,14 +92,16 @@ public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStor
     }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
+        FilmRating rating = FilmDbService.ratingStorage.getRatingById(rs.getInt("film_rating_id"));
+        List<Genre> genre = FilmDbService.genreStorage.getGenresListForFilm(rs.getInt("film_id"));
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("film_title"))
-                .genres(genreStorage.getGenresListForFilm(rs.getInt("film_id")))
+                .genres(genre)
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
-                .mpa(ratingStorage.getRatingById(rs.getInt("film_rating_id")))
+                .mpa(rating)
                 .build();
     }
 }

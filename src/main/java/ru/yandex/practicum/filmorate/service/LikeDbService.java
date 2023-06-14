@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LikeService {
+public class LikeDbService {
     private final LikeStorage likeStorage;
     private final UserStorage userStorage;
     private final FilmStorage filmStorage;

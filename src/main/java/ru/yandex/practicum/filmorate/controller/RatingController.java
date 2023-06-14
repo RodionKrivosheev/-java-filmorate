@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.service.RatingService;
+import ru.yandex.practicum.filmorate.service.RatingDbService;
 
 import java.util.List;
 
@@ -13,15 +13,15 @@ import java.util.List;
 @Component
 @RequestMapping("/mpa")
 public class RatingController {
-    private final RatingService ratingService;
+    private final RatingDbService ratingDbService;
 
     @GetMapping
     public List<FilmRating> getRatingList() {
-        return ratingService.getRatingList();
+        return ratingDbService.getRatingList();
     }
 
     @GetMapping("/{id}")
     public FilmRating getRatingById(@PathVariable int id) {
-        return ratingService.getRatingById(id);
+        return ratingDbService.getRatingById(id);
     }
 }

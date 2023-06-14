@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.service.RatingService;
+import ru.yandex.practicum.filmorate.service.RatingDbService;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ import static org.hamcrest.CoreMatchers.is;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class RatingDbTest {
-    private final RatingService ratingService;
+    private final RatingDbService ratingDbService;
 
     @Test
     public void getRatingList() {
-        List<FilmRating> ratingList = ratingService.getRatingList();
+        List<FilmRating> ratingList = ratingDbService.getRatingList();
 
         checkRating(ratingList.get(0));
         checkRating(ratingList.get(1));
@@ -34,7 +34,7 @@ public class RatingDbTest {
 
     @Test
     public void getRatingById() {
-        checkRating(ratingService.getRatingById(1));
+        checkRating(ratingDbService.getRatingById(1));
     }
 
     private void checkRating(FilmRating rating) {

@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.service.GenreService;
+import ru.yandex.practicum.filmorate.service.GenreDbService;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class GenreDbTest {
-    private final GenreService genreService;
+    private final GenreDbService genreDbService;
 
     @Test
     public void getGenreList() {
-        List<Genre> genreList = genreService.getGenresList();
+        List<Genre> genreList = genreDbService.getGenresList();
 
         checkGenre(genreList.get(0));
         checkGenre(genreList.get(1));
@@ -35,7 +35,7 @@ public class GenreDbTest {
 
     @Test
     public void getGenreById() {
-        checkGenre(genreService.getGenreById(1));
+        checkGenre(genreDbService.getGenreById(1));
     }
 
     private void checkGenre(Genre genre) {
