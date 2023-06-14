@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class GenreDbStorage implements ru.yandex.practicum.filmorate.dao.GenreStorage {
+public class GenreStorage implements ru.yandex.practicum.filmorate.dao.GenreStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override

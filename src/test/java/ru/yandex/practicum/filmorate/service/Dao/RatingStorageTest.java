@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service.Db;
+package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.is;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class RatingDbTest {
+public class RatingStorageTest {
     private final RatingDbService ratingDbService;
 
     @Test

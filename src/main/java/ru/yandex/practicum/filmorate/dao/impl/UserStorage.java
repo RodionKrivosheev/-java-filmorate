@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dao.UserStorage;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -17,7 +16,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class UserDbStorage implements UserStorage {
+public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorage {
     final JdbcTemplate jdbcTemplate;
 
     @Override

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service.Db;
+package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class FilmDbTest {
+public class FilmStorageTest {
     private final FilmDbService filmService;
     private final Genre genre = new Genre(1);
     private final FilmRating mpa = new FilmRating(1);

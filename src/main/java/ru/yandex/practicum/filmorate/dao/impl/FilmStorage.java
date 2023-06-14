@@ -5,10 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.GenreStorage;
+import ru.yandex.practicum.filmorate.dao.RatingStorage;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.service.FilmDbService;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,8 +19,10 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStorage {
+public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorage {
     final JdbcTemplate jdbcTemplate;
+    private final RatingStorage ratingStorage;
+    private final GenreStorage genreStorage;
 
     @Override
     public Film addFilm(Film film) {
@@ -44,7 +47,7 @@ public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStor
 
         int id = (int) keyHolder.getKey().longValue();
 
-        List<Genre> genres = FilmDbService.genreStorage.addGenresToFilm(id, film.getGenres());
+        List<Genre> genres = genreStorage.addGenresToFilm(id, film.getGenres());
         film.setGenres(genres);
 
         return getFilmById(id);
@@ -74,8 +77,8 @@ public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStor
                 film.getMpa().getId(),
                 film.getId());
 
-        FilmDbService.genreStorage.deleteGenresForFilm(film.getId());
-        List<Genre> genres = FilmDbService.genreStorage.addGenresToFilm(film.getId(), film.getGenres());
+        genreStorage.deleteGenresForFilm(film.getId());
+        List<Genre> genres = genreStorage.addGenresToFilm(film.getId(), film.getGenres());
         film.setGenres(genres);
 
         return getFilmById(film.getId());
@@ -90,8 +93,8 @@ public class FilmDbStorage implements ru.yandex.practicum.filmorate.dao.FilmStor
     }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        FilmRating rating = FilmDbService.ratingStorage.getRatingById(rs.getInt("film_rating_id"));
-        List<Genre> genre = FilmDbService.genreStorage.getGenresListForFilm(rs.getInt("film_id"));
+        FilmRating rating = ratingStorage.getRatingById(rs.getInt("film_rating_id"));
+        List<Genre> genre = genreStorage.getGenresListForFilm(rs.getInt("film_id"));
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("film_title"))

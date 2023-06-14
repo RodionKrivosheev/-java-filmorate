@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dao.RatingStorage;
 import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.ResultSet;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class RatingDbStorage implements RatingStorage {
+public class RatingStorage implements ru.yandex.practicum.filmorate.dao.RatingStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override

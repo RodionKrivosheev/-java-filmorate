@@ -14,9 +14,9 @@ import java.util.List;
 @Qualifier
 @RequiredArgsConstructor
 public class FilmDbService {
-    public static GenreStorage genreStorage;
-    public static RatingStorage ratingStorage;
     private final FilmStorage filmStorage;
+    private final RatingStorage ratingStorage;
+    private final GenreStorage genreStorage;
 
 
     public Film addFilm(Film film) {

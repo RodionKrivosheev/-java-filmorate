@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
-import ru.yandex.practicum.filmorate.service.LikeDbService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmController {
     private final FilmDbService filmService;
-    private final LikeDbService likeDbService;
 
     @PostMapping("/films")
     public Film addFilm(@Valid @RequestBody Film film) {
@@ -31,22 +29,16 @@ public class FilmController {
 
     @GetMapping("/films/{id}")
     public Film getFilmById(@PathVariable int id) {
-        log.info("Get film by id controller");
+        log.info("Get film by id " + id);
 
         return filmService.getFilmById(id);
     }
 
-    @GetMapping("/films/")
+    @GetMapping("/films")
     public List<Film> getAllFilms() {
         log.info("get all films controller");
+
         return filmService.getFilmsList(10);
-
     }
 
-    @GetMapping("/films/popular")
-    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
-        log.info("get best films.");
-
-        return likeDbService.getMostPopularFilms(count);
-    }
 }
