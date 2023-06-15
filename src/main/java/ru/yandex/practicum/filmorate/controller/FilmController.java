@@ -59,8 +59,6 @@ public class FilmController {
     @GetMapping("/films/popular")
     public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
         log.info("get best films.");
-
         return likeDbService.getMostPopularFilms(count);
     }
-
 }
