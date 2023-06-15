@@ -2,9 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dao.FilmStorage;
-import ru.yandex.practicum.filmorate.dao.LikeStorage;
-import ru.yandex.practicum.filmorate.dao.UserStorage;
+import ru.yandex.practicum.filmorate.dao.*;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.ValidationException;
@@ -13,7 +11,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LikeDbService {
-    private final LikeStorage likeStorage;
+    private LikeStorage likeStorage;
+    private GenreStorage genreStorage;
+    private RatingStorage ratingStorage;
+
     private final UserStorage userStorage;
     private final FilmStorage filmStorage;
 

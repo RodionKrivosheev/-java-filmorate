@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RatingDbService {
-    private final RatingStorage ratingStorage;
+    private RatingStorage ratingStorage;
 
     public List<FilmRating> getRatingList() {
         return ratingStorage.getRatingList();
