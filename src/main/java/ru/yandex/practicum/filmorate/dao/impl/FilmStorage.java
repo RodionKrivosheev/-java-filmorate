@@ -7,9 +7,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.service.FilmDbService;
-import ru.yandex.practicum.filmorate.service.GenreDbService;
-import ru.yandex.practicum.filmorate.service.RatingDbService;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
