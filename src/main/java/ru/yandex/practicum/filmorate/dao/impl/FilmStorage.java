@@ -104,6 +104,12 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
         for (Genre genre : genres) {
             jdbcTemplate.update(sql, filmId, genre.getId());
         }
+        // таким образом нужно это сделать?
+        /*return  jdbcTemplate.batchUpdate("MERGE INTO film_genre " +
+                "(film_id, genre_id) " +
+                "KEY(film_id, genre_id) " +
+                "VALUES (?, ?)", SqlParameterSourceUtils.createBatch(genres));
+                */
         return daoHelper.getGenresListForFilm(filmId);
     }
 
