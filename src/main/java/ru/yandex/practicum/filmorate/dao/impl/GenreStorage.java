@@ -54,25 +54,9 @@ public class GenreStorage implements ru.yandex.practicum.filmorate.dao.GenreStor
             return new ArrayList<>();
         }
 
-
-        /*
-        List<Genre> genre = new ArrayList<>();
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
-                preparedStatement.setInt(1, genre.get(i).getId());
-                preparedStatement.setString(2, genre.get(i).getName());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return genre.size();
-            }
-        });*/
         for (Genre genre : genres) {
             jdbcTemplate.update(sql, filmId, genre.getId());
         }
-
         return getGenresListForFilm(filmId);
     }
 

@@ -5,8 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.GenreStorage;
+import ru.yandex.practicum.filmorate.dao.RatingStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,9 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorage {
     final JdbcTemplate jdbcTemplate;
-
     private final RatingStorage ratingStorage;
-
     private final GenreStorage genreStorage;
 
     @Override
@@ -32,7 +33,7 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        Date sqlDate = Date.valueOf(film.getReleaseDate());
+        java.sql.Date sqlDate = Date.valueOf(film.getReleaseDate());
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"film_id"});
@@ -91,45 +92,17 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
         return jdbcTemplate.query(sql, this::makeFilm, max);
     }
 
-    private Genre mapToGenre(ResultSet resultSet, int rowNum) throws SQLException {
-        Genre genre = new Genre(1,"11");
-        genre.setId(resultSet.getInt("GENRE_ID"));
-        genre.setName(resultSet.getString("NAME"));
-        return genre;
-    }
-
-    /*private Film makeFilm(ResultSet resultSet, int rowNum) throws SQLException {
-        Film film = new Film(1, "Film1", "" "" "Description1", LocalDate.of(1994, 11,
-                2), 190);
-        film.setId(resultSet.getInt("FILM_ID"));
-        film.setName(resultSet.getString("NAME"));
-        film.setDescription(resultSet.getString("DESCRIPTION"));
-        film.setReleaseDate(resultSet.getDate("RELEASE_DATE").toLocalDate());
-        film.setDuration(resultSet.getInt("DURATION"));
-        film.setMpa(new FilmRating(resultSet.getInt("RATING_ID"), resultSet.getString("R_NAME")));
-        return film;
-    }
-
-    /* private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-         Film film = new Film(1, "God Father", null, "Film about father",
-                 LocalDate.now(), 240, null);
-         film.setId(rs.getInt("film_id"));
-         film.setName(rs.getString("film_title"));
-         film.setDescription(rs.getString("film_description"));
-         film.setReleaseDate(rs.getDate("film_release_date").toLocalDate());
-         film.setDuration(rs.getInt("film_duration"));
-         film.setMpa();
-         return film;
-     }*/
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
+        FilmRating rating = ratingStorage.getRatingById(rs.getInt("film_rating_id"));
+        List<Genre> genre = genreStorage.getGenresListForFilm(rs.getInt("film_id"));
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("film_title"))
-                .genres(genreStorage.getGenresListForFilm(rs.getInt("film_id")))
+                .genres(genre)
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
-                .mpa(ratingStorage.getRatingById(rs.getInt("film_rating_id")))
+                .mpa(rating)
                 .build();
     }
 }

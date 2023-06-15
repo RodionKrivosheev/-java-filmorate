@@ -3,18 +3,21 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.GenreStorage;
+import ru.yandex.practicum.filmorate.dao.RatingStorage;
 import ru.yandex.practicum.filmorate.model.Film;
-
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Component
 public class LikeStorage implements ru.yandex.practicum.filmorate.dao.LikeStorage {
     private final JdbcTemplate jdbcTemplate;
+    private final GenreStorage genreStorage;
     private final RatingStorage ratingStorage;
 
     @Override
@@ -52,14 +55,16 @@ public class LikeStorage implements ru.yandex.practicum.filmorate.dao.LikeStorag
     }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        Film film = new Film(1, "God Father", null, "Film about father",
-                LocalDate.now(), 240, null);
-        film.setId(rs.getInt("film_id"));
-        film.setName(rs.getString("film_title"));
-        film.setDescription(rs.getString("film_description"));
-        film.setReleaseDate(rs.getDate("film_release_date").toLocalDate());
-        film.setDuration(rs.getInt("film_duration"));
-        film.setMpa(ratingStorage.getRatingById(rs.getInt("FILM_RATING_ID")));
-        return film;
+        List<Genre> genreList = genreStorage.getGenresListForFilm(rs.getInt("film_id"));
+        FilmRating rating = ratingStorage.getRatingById(rs.getInt("film_rating_id"));
+        return Film.builder()
+                .id(rs.getInt("film_id"))
+                .name(rs.getString("film_title"))
+                .genres(genreList)
+                .description(rs.getString("film_description"))
+                .releaseDate(rs.getDate("film_release_date").toLocalDate())
+                .duration(rs.getInt("film_duration"))
+                .mpa(rating)
+                .build();
     }
 }

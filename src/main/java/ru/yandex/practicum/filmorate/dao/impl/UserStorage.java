@@ -32,7 +32,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        Date sqlDate = Date.valueOf(user.getBirthday());
+        java.sql.Date sqlDate = Date.valueOf(user.getBirthday());
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"user_id"});
