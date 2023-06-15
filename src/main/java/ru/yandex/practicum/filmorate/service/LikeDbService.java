@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.dao.LikeStorage;
 import ru.yandex.practicum.filmorate.dao.UserStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import javax.validation.ValidationException;
 import java.util.List;
 
 @Service
@@ -23,17 +24,22 @@ public class LikeDbService {
     }
 
     public void unlike(int filmId, int userId) {
-        checkExistenceOfUserAndFilm(filmId, userId);
-
-        likeStorage.unlike(userId, filmId);
+        if (checkExistenceOfUserAndFilm(filmId, userId)) {
+            likeStorage.unlike(userId, filmId);
+        } else {
+            throw new ValidationException("Problem with existence of user " + userId + " or film " + filmId);
+        }
     }
 
     public List<Film> getMostPopularFilms(Integer filmsCount) {
         return likeStorage.getMostPopularFilms(filmsCount);
     }
 
-    private void checkExistenceOfUserAndFilm(int filmId, int userId) {
-        userStorage.getUserById(userId);
-        filmStorage.getFilmById(filmId);
+    private boolean checkExistenceOfUserAndFilm(int filmId, int userId) {
+        if (userStorage.getUserById(userId) != null && filmStorage.getFilmById(filmId) != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
