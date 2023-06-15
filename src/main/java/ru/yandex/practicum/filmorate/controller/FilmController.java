@@ -42,6 +42,20 @@ public class FilmController {
         return filmService.getFilmsList(10);
     }
 
+    @PutMapping("/films/{id}/like/{userId}")
+    public void likeFilm(@PathVariable int id, @PathVariable int userId) {
+        log.info("like film " + id + " by " + userId);
+
+        likeDbService.like(id, userId);
+    }
+
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public void unlikeFilm(@PathVariable int id, @PathVariable int userId) {
+        log.info("unlike film " + id + " by " + userId);
+
+        likeDbService.unlike(id, userId);
+    }
+    
     @GetMapping("/films/popular")
     public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
         log.info("get best films.");
