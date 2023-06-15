@@ -5,19 +5,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.auxilary.DaoHelper;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorage {
+public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorageIn {
     final JdbcTemplate jdbcTemplate;
+
+    private final DaoHelper daoHelper;
 
     @Override
     public User addUser(User user) {
@@ -32,7 +34,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        java.sql.Date sqlDate = Date.valueOf(user.getBirthday());
+        Date sqlDate = Date.valueOf(user.getBirthday());
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"user_id"});
@@ -43,7 +45,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
             return stmt;
         }, keyHolder);
 
-        return getUserById((int) keyHolder.getKey().longValue());
+        return getUserById((int) Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
@@ -91,7 +93,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
         String sql =
                 "SELECT * FROM users WHERE user_id = ?";
 
-        return jdbcTemplate.queryForObject(sql, this::makeUser, userId);
+        return jdbcTemplate.queryForObject(sql, daoHelper::makeUser, userId);
     }
 
     @Override
@@ -103,7 +105,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
                         "ON f.friend_id = u.user_id " +
                         "WHERE f.user_id = ?";
 
-        return jdbcTemplate.query(sql, this::makeUser, userId);
+        return jdbcTemplate.query(sql, daoHelper::makeUser, userId);
     }
 
     @Override
@@ -128,7 +130,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
                                 "JOIN u2 " +
                                 "ON u1.user_id = u2.user_id ";
 
-        return jdbcTemplate.query(sql, this::makeUser, userId, friendId);
+        return jdbcTemplate.query(sql, daoHelper::makeUser, userId, friendId);
     }
 
     @Override
@@ -138,17 +140,7 @@ public class UserStorage implements ru.yandex.practicum.filmorate.dao.UserStorag
                         "FROM users " +
                         "LIMIT ?";
 
-        return jdbcTemplate.query(sql, this::makeUser, max);
-    }
-
-    private User makeUser(ResultSet rs, int rowNum) throws SQLException {
-        return User.builder()
-                .id(rs.getInt("user_id"))
-                .email(rs.getString("user_email"))
-                .login(rs.getString("user_login"))
-                .name(rs.getString("user_name"))
-                .birthday(rs.getDate("user_birthday").toLocalDate())
-                .build();
+        return jdbcTemplate.query(sql, daoHelper::makeUser, max);
     }
 
     private void checkConfirmation(int userId, int friendId) {

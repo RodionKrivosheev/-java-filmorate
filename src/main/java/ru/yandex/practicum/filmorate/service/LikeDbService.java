@@ -2,9 +2,9 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dao.FilmStorage;
-import ru.yandex.practicum.filmorate.dao.LikeStorage;
-import ru.yandex.practicum.filmorate.dao.UserStorage;
+import ru.yandex.practicum.filmorate.dao.impl.FilmStorage;
+import ru.yandex.practicum.filmorate.dao.impl.LikeStorage;
+import ru.yandex.practicum.filmorate.dao.impl.UserStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.ValidationException;

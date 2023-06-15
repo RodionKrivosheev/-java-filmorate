@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class RatingStorage implements ru.yandex.practicum.filmorate.dao.RatingStorage {
+public class RatingStorage implements ru.yandex.practicum.filmorate.dao.RatingStorageIn {
     private final JdbcTemplate jdbcTemplate;
 
     @Override

@@ -2,17 +2,17 @@ package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.dao.GenreStorageIn;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 @RequiredArgsConstructor
-public class GenreStorage implements ru.yandex.practicum.filmorate.dao.GenreStorage {
+public class GenreStorage implements GenreStorageIn {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -34,33 +34,6 @@ public class GenreStorage implements ru.yandex.practicum.filmorate.dao.GenreStor
     }
 
     @Override
-    public void deleteGenresForFilm(int filmId) {
-        String sql =
-                "DELETE FROM film_genre " +
-                        "WHERE film_id = ?";
-
-        jdbcTemplate.update(sql, filmId);
-    }
-
-    @Override
-    public List<Genre> addGenresToFilm(int filmId, List<Genre> genres) {
-        String sql =
-                "MERGE INTO film_genre " +
-                        "(film_id, genre_id) " +
-                        "KEY(film_id, genre_id) " +
-                        "VALUES (?, ?)";
-
-        if (genres == null || genres.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        for (Genre genre : genres) {
-            jdbcTemplate.update(sql, filmId, genre.getId());
-        }
-        return getGenresListForFilm(filmId);
-    }
-
-    @Override
     public Genre getGenreById(int genreId) {
         String sql =
                 "SELECT * FROM genres WHERE genre_id = ?";
@@ -72,4 +45,5 @@ public class GenreStorage implements ru.yandex.practicum.filmorate.dao.GenreStor
         return new Genre(rs.getInt("genre_id"),
                 rs.getString("genre_title"));
     }
+
 }

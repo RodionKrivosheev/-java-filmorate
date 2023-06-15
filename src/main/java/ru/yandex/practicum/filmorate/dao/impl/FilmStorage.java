@@ -5,29 +5,27 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dao.GenreStorage;
-import ru.yandex.practicum.filmorate.dao.RatingStorage;
+import ru.yandex.practicum.filmorate.auxilary.DaoHelper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorage {
+public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorageIn {
     final JdbcTemplate jdbcTemplate;
-    private final RatingStorage ratingStorage;
-    private final GenreStorage genreStorage;
+
+    private final DaoHelper daoHelper;
 
     @Override
     public Film addFilm(Film film) {
         String sql =
-                        "INSERT INTO films " +
+                "INSERT INTO films " +
                         "(film_title, film_description, film_release_date, film_duration, film_rating_id) " +
                         "VALUES (?, ?, ?, ?, ?)";
 
@@ -45,10 +43,10 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
             return stmt;
         }, keyHolder);
 
-        int id = (int) keyHolder.getKey().longValue();
+        int id = (int) Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        List<Genre> genres = genreStorage.addGenresToFilm(id, film.getGenres());
-        film.setGenres(genres);
+        List<Genre> filmGenres = addGenresToFilm(id, film.getGenres());
+        film.setGenres(filmGenres);
 
         return getFilmById(id);
     }
@@ -58,7 +56,7 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
         String sql =
                 "SELECT * FROM films WHERE film_id = ?";
 
-        return jdbcTemplate.queryForObject(sql, this::makeFilm, filmId);
+        return jdbcTemplate.queryForObject(sql, daoHelper::makeFilm, filmId);
     }
 
     @Override
@@ -77,9 +75,9 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
                 film.getMpa().getId(),
                 film.getId());
 
-        genreStorage.deleteGenresForFilm(film.getId());
-        List<Genre> genres = genreStorage.addGenresToFilm(film.getId(), film.getGenres());
-        film.setGenres(genres);
+        deleteGenresForFilm(film.getId());
+        List<Genre> filmGenres = addGenresToFilm(film.getId(), film.getGenres());
+        film.setGenres(filmGenres);
 
         return getFilmById(film.getId());
     }
@@ -89,20 +87,31 @@ public class FilmStorage implements ru.yandex.practicum.filmorate.dao.FilmStorag
         String sql =
                 "SELECT * FROM films LIMIT ?";
 
-        return jdbcTemplate.query(sql, this::makeFilm, max);
+        return jdbcTemplate.query(sql, daoHelper::makeFilm, max);
     }
 
-    private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        FilmRating rating = ratingStorage.getRatingById(rs.getInt("film_rating_id"));
-        List<Genre> genre = genreStorage.getGenresListForFilm(rs.getInt("film_id"));
-        return Film.builder()
-                .id(rs.getInt("film_id"))
-                .name(rs.getString("film_title"))
-                .genres(genre)
-                .description(rs.getString("film_description"))
-                .releaseDate(rs.getDate("film_release_date").toLocalDate())
-                .duration(rs.getInt("film_duration"))
-                .mpa(rating)
-                .build();
+    private List<Genre> addGenresToFilm(int filmId, List<Genre> genres) {
+        String sql =
+                "MERGE INTO film_genre " +
+                        "(film_id, genre_id) " +
+                        "KEY(film_id, genre_id) " +
+                        "VALUES (?, ?)";
+
+        if (genres == null || genres.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        for (Genre genre : genres) {
+            jdbcTemplate.update(sql, filmId, genre.getId());
+        }
+        return daoHelper.getGenresListForFilm(filmId);
+    }
+
+    private void deleteGenresForFilm(int filmId) {
+        String sql =
+                "DELETE FROM film_genre " +
+                        "WHERE film_id = ?";
+
+        jdbcTemplate.update(sql, filmId);
     }
 }

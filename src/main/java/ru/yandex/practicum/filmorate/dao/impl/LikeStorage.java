@@ -3,22 +3,20 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dao.GenreStorage;
-import ru.yandex.practicum.filmorate.dao.RatingStorage;
+import ru.yandex.practicum.filmorate.auxilary.DaoHelper;
+import ru.yandex.practicum.filmorate.dao.LikeStorageIn;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.FilmRating;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-public class LikeStorage implements ru.yandex.practicum.filmorate.dao.LikeStorage {
+public class LikeStorage implements LikeStorageIn {
     private final JdbcTemplate jdbcTemplate;
-    private final GenreStorage genreStorage;
-    private final RatingStorage ratingStorage;
+
+    private final DaoHelper daoHelper;
 
     @Override
     public void like(int userId, int filmId) {
@@ -51,20 +49,6 @@ public class LikeStorage implements ru.yandex.practicum.filmorate.dao.LikeStorag
                         "ORDER BY COUNT(l.user_id) DESC " +
                         "LIMIT ?";
 
-        return jdbcTemplate.query(sql, this::makeFilm, filmsCount);
-    }
-
-    private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        List<Genre> genreList = genreStorage.getGenresListForFilm(rs.getInt("film_id"));
-        FilmRating rating = ratingStorage.getRatingById(rs.getInt("film_rating_id"));
-        return Film.builder()
-                .id(rs.getInt("film_id"))
-                .name(rs.getString("film_title"))
-                .genres(genreList)
-                .description(rs.getString("film_description"))
-                .releaseDate(rs.getDate("film_release_date").toLocalDate())
-                .duration(rs.getInt("film_duration"))
-                .mpa(rating)
-                .build();
+        return jdbcTemplate.query(sql, daoHelper::makeFilm, filmsCount);
     }
 }

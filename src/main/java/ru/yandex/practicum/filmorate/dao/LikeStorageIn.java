@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
 
-public interface LikeStorage {
+public interface LikeStorageIn {
     void like(int userId, int filmId);
 
     void unlike(int userId, int filmId);

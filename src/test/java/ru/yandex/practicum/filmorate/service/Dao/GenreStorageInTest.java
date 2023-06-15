@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class GenreStorageTest {
+public class GenreStorageInTest {
     private final GenreDbService genreDbService;
 
     @Test

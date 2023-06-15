@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.util.List;
 
-public interface RatingStorage {
+public interface RatingStorageIn {
     List<FilmRating> getRatingList();
 
     FilmRating getRatingById(int ratingId);
