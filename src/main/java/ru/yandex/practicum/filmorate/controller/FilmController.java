@@ -55,7 +55,7 @@ public class FilmController {
 
         likeDbService.unlike(id, userId);
     }
-    
+
     @GetMapping("/films/popular")
     public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
         log.info("get best films.");
